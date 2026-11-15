@@ -1,0 +1,14 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {moveRouteSegment,moveRouteBend,resolveManualRoute,validateWireRoutes} from '../dist/manual-route.js';
+import {demo,validate,simulate} from '../dist/model.js';
+import {geometry,settle,routeCable,cableObstacles} from '../dist/geometry.js';
+import {routeConflict,WIRE_GAP} from '../dist/wire-spacing.js';
+const p=(x,y)=>({x,y});
+function orthogonal(points){for(let i=1;i<points.length;i++)assert.ok(points[i].x===points[i-1].x||points[i].y===points[i-1].y)}
+test('straight segment can be pulled into dogleg without moving either port',()=>{const source=[p(0,0),p(300,0)],r=moveRouteSegment(source,0,80);orthogonal(r);assert.deepEqual(r[0],source[0]);assert.deepEqual(r.at(-1),source.at(-1));assert.ok(r.some(p=>p.y===80));assert.deepEqual(source,[p(0,0),p(300,0)])});
+test('interior segments and endpoint-adjacent corners stay orthogonal',()=>{const source=[p(0,0),p(80,0),p(80,100),p(300,100)];for(const [kind,index] of [['bend',1],['bend',2],['segment',0],['segment',1],['segment',2]]){const r=kind==='bend'?moveRouteBend(source,index,p(130,60)):moveRouteSegment(source,index,140);orthogonal(r);assert.deepEqual(r[0],source[0]);assert.deepEqual(r.at(-1),source.at(-1))}});
+test('manual route follows group moves and reconnects one moved endpoint',()=>{const saved={points:[p(0,0),p(80,0),p(80,100),p(300,100)]};const moved=resolveManualRoute(saved,p(20,30),p(320,130));assert.deepEqual(moved,saved.points.map(p=>({x:p.x+20,y:p.y+30})));const one=resolveManualRoute(saved,p(0,20),p(300,100));orthogonal(one);assert.deepEqual(one[0],p(0,20));assert.deepEqual(one.at(-1),p(300,100))});
+test('manual routes survive JSON roundtrip and do not affect network connectivity',()=>{const s=demo(),source=s.nodes.find(n=>n.type==='client').id;s.wireRoutes=[{id:'link:'+s.links[0].id,points:[p(0,0),p(100,0)]}];const saved=validate(JSON.parse(JSON.stringify(s)));assert.deepEqual(saved.wireRoutes,s.wireRoutes);assert.equal(simulate(saved,{source,target:'site.lab',protocol:'tcp',port:8080}).ok,true);assert.throws(()=>validateWireRoutes([{id:'x',points:[p(0,0),p(10,20)]}]),/ортогональным/);assert.throws(()=>validateWireRoutes([{id:'x',points:[p(0,0),p(NaN,0)]}]),/Некорректный/)});
+test('parallel routes keep clearance while perpendicular crossings remain allowed',()=>{const lanes=[[p(0,0),p(300,0)]];assert.equal(routeConflict([p(30,4),p(250,4)],lanes),true);assert.equal(routeConflict([p(30,WIRE_GAP),p(250,WIRE_GAP)],lanes),false);assert.equal(routeConflict([p(100,-50),p(100,50)],lanes),false)});
+test('automatic demo cables do not overlap previously routed cables',()=>{const s=demo();settle(s);const g=geometry(s),lanes=[];for(const [i,l] of s.links.entries()){const a=g.ports.get(l.a),b=g.ports.get(l.b),r=routeCable(a,b,cableObstacles(g,a,b),i,false,lanes);assert.equal(r.blocked,false,'blocked '+i);assert.equal(routeConflict(r.points,lanes),false,'collision '+i);lanes.push(r.points)}});

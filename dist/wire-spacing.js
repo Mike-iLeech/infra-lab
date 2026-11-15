@@ -1,0 +1,5 @@
+// Nominal cable strokes are 2.2 units, active traffic uses 3; keep a clear three-stroke gap.
+export const WIRE_GAP=16;
+export function parallelConflict(a,b,lanes,gap=WIRE_GAP){const horizontal=a.y===b.y,vertical=a.x===b.x;if(!horizontal&&!vertical)return false;for(const route of lanes)for(let i=1;i<route.length;i++){const p=route[i-1],q=route[i];if(horizontal&&p.y===q.y&&Math.abs(a.y-p.y)<gap-.001&&Math.min(Math.max(a.x,b.x),Math.max(p.x,q.x))-Math.max(Math.min(a.x,b.x),Math.min(p.x,q.x))>.001)return true;if(vertical&&p.x===q.x&&Math.abs(a.x-p.x)<gap-.001&&Math.min(Math.max(a.y,b.y),Math.max(p.y,q.y))-Math.max(Math.min(a.y,b.y),Math.min(p.y,q.y))>.001)return true}return false}
+export function routeConflict(points,lanes,gap=WIRE_GAP){return points.slice(1).some((b,i)=>parallelConflict(points[i],b,lanes,gap))}
+export function laneCoordinates(lanes,gap=WIRE_GAP){const xs=[],ys=[];for(const route of lanes)for(let i=1;i<route.length;i++){const a=route[i-1],b=route[i];if(a.x===b.x)xs.push(a.x-gap,a.x+gap);if(a.y===b.y)ys.push(a.y-gap,a.y+gap);xs.push(a.x,b.x);ys.push(a.y,b.y)}return{xs,ys}}

@@ -1,0 +1,1480 @@
+{
+  "version": 1,
+  "schemaVersion": 2,
+  "nodes": [
+    {
+      "id": "b6447be7-fd1e-489c-9259-42330b312c9a",
+      "type": "client",
+      "parent": null,
+      "x": 40,
+      "y": 100,
+      "w": 260,
+      "h": 160,
+      "name": "Клиент · браузер",
+      "collapsed": false,
+      "interfaces": [
+        {
+          "id": "81bcf264-c1bb-4779-aa18-7b40ae50e896",
+          "switchMode": "access",
+          "accessVlan": 1,
+          "nativeVlan": 1,
+          "allowedVlans": [
+            1,
+            10,
+            20
+          ],
+          "ip": "10.10.0.100",
+          "prefix": 24,
+          "gateway": "",
+          "dns": "10.10.0.53",
+          "mode": "manual",
+          "kind": "physical",
+          "profile": "rj45",
+          "interfaceRole": "physical-nic",
+          "name": "eth0"
+        }
+      ],
+      "services": {},
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      }
+    },
+    {
+      "id": "9dc4d2b2-37aa-498b-8dcb-f21ae462dc1b",
+      "type": "switch",
+      "parent": null,
+      "x": 40,
+      "y": 340,
+      "w": 250,
+      "h": 160,
+      "name": "SW-LAN · VLAN 10",
+      "collapsed": false,
+      "interfaces": [
+        {
+          "id": "a1f4602f-4a75-45fe-a599-5a468a3f6e64",
+          "switchMode": "access",
+          "accessVlan": 10,
+          "nativeVlan": 1,
+          "allowedVlans": [
+            1,
+            10,
+            20
+          ],
+          "ip": "",
+          "prefix": 24,
+          "gateway": "",
+          "dns": "",
+          "mode": "auto",
+          "kind": "physical",
+          "profile": "rj45",
+          "interfaceRole": "hardware",
+          "name": "port0"
+        },
+        {
+          "id": "5d628a0b-8ee4-44eb-8105-e2cb4a66abd2",
+          "switchMode": "access",
+          "accessVlan": 10,
+          "nativeVlan": 1,
+          "allowedVlans": [
+            1,
+            10,
+            20
+          ],
+          "ip": "",
+          "prefix": 24,
+          "gateway": "",
+          "dns": "",
+          "mode": "auto",
+          "kind": "physical",
+          "profile": "rj45",
+          "interfaceRole": "hardware",
+          "name": "port1"
+        },
+        {
+          "id": "7cd48def-bf5d-4353-a126-fd16dd20261f",
+          "switchMode": "access",
+          "accessVlan": 10,
+          "nativeVlan": 1,
+          "allowedVlans": [
+            1,
+            10,
+            20
+          ],
+          "ip": "",
+          "prefix": 24,
+          "gateway": "",
+          "dns": "",
+          "mode": "auto",
+          "kind": "physical",
+          "profile": "rj45",
+          "interfaceRole": "hardware",
+          "name": "port2"
+        },
+        {
+          "id": "9654ef8a-453a-4520-a4fa-c16b7331b4c9",
+          "switchMode": "access",
+          "accessVlan": 10,
+          "nativeVlan": 1,
+          "allowedVlans": [
+            1,
+            10,
+            20
+          ],
+          "ip": "",
+          "prefix": 24,
+          "gateway": "",
+          "dns": "",
+          "mode": "auto",
+          "kind": "physical",
+          "profile": "rj45",
+          "interfaceRole": "hardware",
+          "name": "port3"
+        },
+        {
+          "id": "51310c33-9ad6-4158-b438-14d5306f757e",
+          "switchMode": "access",
+          "accessVlan": 10,
+          "nativeVlan": 1,
+          "allowedVlans": [
+            1,
+            10,
+            20
+          ],
+          "ip": "",
+          "prefix": 24,
+          "gateway": "",
+          "dns": "",
+          "mode": "auto",
+          "kind": "physical",
+          "profile": "rj45",
+          "interfaceRole": "hardware",
+          "name": "port4"
+        },
+        {
+          "id": "70e56c84-409f-43a5-b63c-0a26a5724fd2",
+          "switchMode": "access",
+          "accessVlan": 10,
+          "nativeVlan": 1,
+          "allowedVlans": [
+            1,
+            10,
+            20
+          ],
+          "ip": "",
+          "prefix": 24,
+          "gateway": "",
+          "dns": "",
+          "mode": "auto",
+          "kind": "physical",
+          "profile": "rj45",
+          "interfaceRole": "hardware",
+          "name": "port5"
+        }
+      ],
+      "services": {},
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      }
+    },
+    {
+      "id": "5995a544-3f71-4763-803f-6de916d0199c",
+      "type": "dns",
+      "parent": null,
+      "x": 40,
+      "y": 810,
+      "w": 260,
+      "h": 160,
+      "name": "DNS · site.lab",
+      "collapsed": false,
+      "interfaces": [
+        {
+          "id": "5c571ea9-ac06-4d74-8856-dad532bfd26b",
+          "switchMode": "access",
+          "accessVlan": 1,
+          "nativeVlan": 1,
+          "allowedVlans": [
+            1,
+            10,
+            20
+          ],
+          "ip": "10.10.0.53",
+          "prefix": 24,
+          "gateway": "",
+          "dns": "",
+          "mode": "manual",
+          "kind": "physical",
+          "profile": "rj45",
+          "interfaceRole": "service-nic",
+          "name": "eth0"
+        }
+      ],
+      "services": {
+        "dns": {
+          "enabled": true,
+          "records": {
+            "site.lab": "10.10.0.21",
+            "worker2.lab": "10.10.0.22"
+          }
+        }
+      },
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      }
+    },
+    {
+      "id": "1455fc5b-ec90-4b0f-941d-deed80065c2d",
+      "type": "proxmox_cluster",
+      "parent": null,
+      "x": 40,
+      "y": 1080,
+      "w": 260,
+      "h": 160,
+      "name": "PVE-LAB · 3 хоста",
+      "collapsed": false,
+      "interfaces": [],
+      "services": {},
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      }
+    },
+    {
+      "id": "c46b4636-fd9a-425c-b8a5-9c19f5a2d221",
+      "type": "k8s_cluster",
+      "parent": null,
+      "x": 40,
+      "y": 1300,
+      "w": 260,
+      "h": 160,
+      "name": "K8S-LAB · 3 ВМ",
+      "collapsed": false,
+      "interfaces": [],
+      "services": {},
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      }
+    },
+    {
+      "id": "0cd7c80f-3b9e-41ad-9433-b8985d93b2c3",
+      "type": "k8s_service",
+      "parent": "c46b4636-fd9a-425c-b8a5-9c19f5a2d221",
+      "x": 24,
+      "y": 100,
+      "w": 260,
+      "h": 160,
+      "name": "nginx-web · NodePort 30080",
+      "collapsed": false,
+      "interfaces": [],
+      "services": {
+        "nodeport": {
+          "namespace": "demo",
+          "selector": "app=nginx",
+          "port": 80,
+          "targetPort": 80,
+          "nodePort": 30080,
+          "externalTrafficPolicy": "Cluster",
+          "preferredPod": "c66f490a-bd03-415e-9cdd-139c8ca72f72"
+        }
+      },
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      }
+    },
+    {
+      "id": "5eb7c0ea-7eaa-49c4-a3cc-60978125dfa7",
+      "type": "server",
+      "parent": null,
+      "x": 2350,
+      "y": 100,
+      "w": 260,
+      "h": 160,
+      "name": "SRV-01 · Proxmox",
+      "collapsed": false,
+      "interfaces": [
+        {
+          "id": "1f9ffbdf-4d22-4bf2-8b73-76e474f2cac6",
+          "switchMode": "access",
+          "accessVlan": 1,
+          "nativeVlan": 1,
+          "allowedVlans": [
+            1,
+            10,
+            20
+          ],
+          "ip": "",
+          "prefix": 24,
+          "gateway": "",
+          "dns": "",
+          "mode": "auto",
+          "kind": "physical",
+          "profile": "rj45",
+          "interfaceRole": "physical-nic",
+          "name": "eno1"
+        }
+      ],
+      "services": {},
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      }
+    },
+    {
+      "id": "bd8fdb57-d30c-48ab-b729-1ee2bd6d8e3f",
+      "type": "proxmox",
+      "parent": "5eb7c0ea-7eaa-49c4-a3cc-60978125dfa7",
+      "x": 24,
+      "y": 120,
+      "w": 260,
+      "h": 160,
+      "name": "PVE-01",
+      "collapsed": false,
+      "interfaces": [],
+      "services": {},
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      },
+      "clusterId": "1455fc5b-ec90-4b0f-941d-deed80065c2d"
+    },
+    {
+      "id": "7cc340c6-e18e-4840-ab83-c8b4522c8a7d",
+      "type": "bridge",
+      "parent": "bd8fdb57-d30c-48ab-b729-1ee2bd6d8e3f",
+      "x": 24,
+      "y": 100,
+      "w": 250,
+      "h": 160,
+      "name": "vmbr0 · LAN → ВМ",
+      "collapsed": false,
+      "interfaces": [
+        {
+          "id": "b7a1ccae-2e70-4fd8-b1d5-efce8321ea83",
+          "switchMode": "access",
+          "accessVlan": 1,
+          "nativeVlan": 1,
+          "allowedVlans": [
+            1,
+            10,
+            20
+          ],
+          "ip": "10.10.0.11",
+          "prefix": 24,
+          "gateway": "",
+          "dns": "",
+          "mode": "manual",
+          "kind": "virtual",
+          "profile": "virtual",
+          "interfaceRole": "bridge-l3",
+          "name": "vmbr0"
+        }
+      ],
+      "services": {},
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      },
+      "members": [
+        "1f9ffbdf-4d22-4bf2-8b73-76e474f2cac6",
+        "3afdd893-4ffe-406d-b3ca-4aec147e693c"
+      ]
+    },
+    {
+      "id": "6421958e-7a4e-4dd5-ae5b-95dfde308530",
+      "type": "vm",
+      "parent": "bd8fdb57-d30c-48ab-b729-1ee2bd6d8e3f",
+      "x": 370,
+      "y": 100,
+      "w": 260,
+      "h": 160,
+      "name": "VM 101 · control-plane",
+      "collapsed": true,
+      "interfaces": [
+        {
+          "id": "3afdd893-4ffe-406d-b3ca-4aec147e693c",
+          "switchMode": "access",
+          "accessVlan": 1,
+          "nativeVlan": 1,
+          "allowedVlans": [
+            1,
+            10,
+            20
+          ],
+          "ip": "",
+          "prefix": 24,
+          "gateway": "",
+          "dns": "",
+          "mode": "auto",
+          "kind": "virtual",
+          "profile": "virtual",
+          "interfaceRole": "vm-nic",
+          "name": "net0 · virtio"
+        }
+      ],
+      "services": {},
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      }
+    },
+    {
+      "id": "d2db35a2-8fe7-4e42-a07e-ac8707759d12",
+      "type": "ubuntu",
+      "parent": "6421958e-7a4e-4dd5-ae5b-95dfde308530",
+      "x": 24,
+      "y": 120,
+      "w": 260,
+      "h": 160,
+      "name": "Ubuntu · control-plane",
+      "collapsed": false,
+      "interfaces": [
+        {
+          "id": "d9f33855-5fa9-4253-ae00-26080a157fcb",
+          "switchMode": "access",
+          "accessVlan": 1,
+          "nativeVlan": 1,
+          "allowedVlans": [
+            1,
+            10,
+            20
+          ],
+          "ip": "10.10.0.20",
+          "prefix": 24,
+          "gateway": "",
+          "dns": "",
+          "mode": "manual",
+          "kind": "virtual",
+          "profile": "virtual",
+          "interfaceRole": "guest-nic",
+          "name": "eth0"
+        }
+      ],
+      "services": {
+        "cni": {
+          "enabled": true,
+          "mode": "routed-host-gw",
+          "routes": [
+            {
+              "cidr": "10.244.1.0/24",
+              "via": "10.10.0.21"
+            },
+            {
+              "cidr": "10.244.2.0/24",
+              "via": "10.10.0.22"
+            }
+          ]
+        }
+      },
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      }
+    },
+    {
+      "id": "8ac7d023-8b31-4d0b-a1af-b2ca2ef0851a",
+      "type": "k8s_node",
+      "parent": "d2db35a2-8fe7-4e42-a07e-ac8707759d12",
+      "x": 24,
+      "y": 300,
+      "w": 260,
+      "h": 160,
+      "name": "control-plane",
+      "collapsed": false,
+      "interfaces": [],
+      "services": {
+        "kubernetes": {
+          "role": "control-plane",
+          "runtime": "containerd",
+          "version": "",
+          "cni": "routed CNI / host-gw · без VXLAN",
+          "podCIDR": "10.244.0.0/24",
+          "controlModel": 1,
+          "runtimeId": "a81669c0-d785-47d7-a686-5db74563b2e8"
+        }
+      },
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      },
+      "clusterId": "c46b4636-fd9a-425c-b8a5-9c19f5a2d221"
+    },
+    {
+      "id": "bb802935-c615-4236-9c64-d3d530f9f110",
+      "type": "server",
+      "parent": null,
+      "x": 610,
+      "y": 100,
+      "w": 260,
+      "h": 160,
+      "name": "SRV-02 · Proxmox",
+      "collapsed": false,
+      "interfaces": [
+        {
+          "id": "1d046cd0-d707-4e12-8b55-a715b26afc0e",
+          "switchMode": "access",
+          "accessVlan": 1,
+          "nativeVlan": 1,
+          "allowedVlans": [
+            1,
+            10,
+            20
+          ],
+          "ip": "",
+          "prefix": 24,
+          "gateway": "",
+          "dns": "",
+          "mode": "auto",
+          "kind": "physical",
+          "profile": "rj45",
+          "interfaceRole": "physical-nic",
+          "name": "eno1"
+        }
+      ],
+      "services": {},
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      }
+    },
+    {
+      "id": "e26066d6-2a6a-48e3-a50e-7884f86600d3",
+      "type": "proxmox",
+      "parent": "bb802935-c615-4236-9c64-d3d530f9f110",
+      "x": 24,
+      "y": 120,
+      "w": 260,
+      "h": 160,
+      "name": "PVE-02",
+      "collapsed": false,
+      "interfaces": [],
+      "services": {},
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      },
+      "clusterId": "1455fc5b-ec90-4b0f-941d-deed80065c2d"
+    },
+    {
+      "id": "2c6fb236-c0da-4126-ab06-33eeea3e5d7d",
+      "type": "bridge",
+      "parent": "e26066d6-2a6a-48e3-a50e-7884f86600d3",
+      "x": 24,
+      "y": 100,
+      "w": 250,
+      "h": 160,
+      "name": "vmbr0 · LAN → ВМ",
+      "collapsed": false,
+      "interfaces": [
+        {
+          "id": "e504d0d4-652f-4f25-8269-59cb82543947",
+          "switchMode": "access",
+          "accessVlan": 1,
+          "nativeVlan": 1,
+          "allowedVlans": [
+            1,
+            10,
+            20
+          ],
+          "ip": "10.10.0.12",
+          "prefix": 24,
+          "gateway": "",
+          "dns": "",
+          "mode": "manual",
+          "kind": "virtual",
+          "profile": "virtual",
+          "interfaceRole": "bridge-l3",
+          "name": "vmbr0"
+        }
+      ],
+      "services": {},
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      },
+      "members": [
+        "1d046cd0-d707-4e12-8b55-a715b26afc0e",
+        "804632d1-faf0-4831-a05f-1bcb2e10a8c5"
+      ]
+    },
+    {
+      "id": "3cd0ec67-eaeb-42da-9ac2-46f23a80e50e",
+      "type": "vm",
+      "parent": "e26066d6-2a6a-48e3-a50e-7884f86600d3",
+      "x": 370,
+      "y": 100,
+      "w": 260,
+      "h": 160,
+      "name": "VM 102 · worker-01",
+      "collapsed": false,
+      "interfaces": [
+        {
+          "id": "804632d1-faf0-4831-a05f-1bcb2e10a8c5",
+          "switchMode": "access",
+          "accessVlan": 1,
+          "nativeVlan": 1,
+          "allowedVlans": [
+            1,
+            10,
+            20
+          ],
+          "ip": "",
+          "prefix": 24,
+          "gateway": "",
+          "dns": "",
+          "mode": "auto",
+          "kind": "virtual",
+          "profile": "virtual",
+          "interfaceRole": "vm-nic",
+          "name": "net0 · virtio"
+        }
+      ],
+      "services": {},
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      }
+    },
+    {
+      "id": "dca7b5da-f8de-4822-8ef0-42e9234b5692",
+      "type": "ubuntu",
+      "parent": "3cd0ec67-eaeb-42da-9ac2-46f23a80e50e",
+      "x": 24,
+      "y": 120,
+      "w": 260,
+      "h": 160,
+      "name": "Ubuntu · worker-01",
+      "collapsed": false,
+      "interfaces": [
+        {
+          "id": "65a4267b-f8c5-4971-a54d-aa19f5b8846d",
+          "switchMode": "access",
+          "accessVlan": 1,
+          "nativeVlan": 1,
+          "allowedVlans": [
+            1,
+            10,
+            20
+          ],
+          "ip": "10.10.0.21",
+          "prefix": 24,
+          "gateway": "",
+          "dns": "",
+          "mode": "manual",
+          "kind": "virtual",
+          "profile": "virtual",
+          "interfaceRole": "guest-nic",
+          "name": "eth0"
+        },
+        {
+          "id": "2a2ff23d-5392-4557-a3c1-b2771328667b",
+          "switchMode": "access",
+          "accessVlan": 1,
+          "nativeVlan": 1,
+          "allowedVlans": [
+            1,
+            10,
+            20
+          ],
+          "ip": "",
+          "prefix": 24,
+          "gateway": "",
+          "dns": "",
+          "mode": "manual",
+          "kind": "virtual",
+          "profile": "virtual",
+          "interfaceRole": "veth",
+          "name": "veth-nginx-1"
+        }
+      ],
+      "services": {
+        "cni": {
+          "enabled": true,
+          "mode": "routed-host-gw",
+          "routes": [
+            {
+              "cidr": "10.244.2.0/24",
+              "via": "10.10.0.22"
+            }
+          ]
+        }
+      },
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      }
+    },
+    {
+      "id": "60f873bd-ae69-4e7f-9b0e-3d401d9eb23d",
+      "type": "k8s_node",
+      "parent": "dca7b5da-f8de-4822-8ef0-42e9234b5692",
+      "x": 500,
+      "y": 300,
+      "w": 260,
+      "h": 160,
+      "name": "worker-01",
+      "collapsed": false,
+      "interfaces": [],
+      "services": {
+        "kubernetes": {
+          "role": "worker",
+          "runtime": "containerd",
+          "version": "",
+          "cni": "routed CNI / host-gw · без VXLAN",
+          "podCIDR": "10.244.1.0/24",
+          "controlModel": 1,
+          "runtimeId": "41a5434a-a5e6-4588-855b-8397c007f6d4"
+        }
+      },
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      },
+      "clusterId": "c46b4636-fd9a-425c-b8a5-9c19f5a2d221"
+    },
+    {
+      "id": "32e8798e-e423-478a-aec6-d64335fa69ce",
+      "type": "bridge",
+      "parent": "dca7b5da-f8de-4822-8ef0-42e9234b5692",
+      "x": 24,
+      "y": 300,
+      "w": 250,
+      "h": 160,
+      "name": "cni0 · 10.244.1.0/24",
+      "collapsed": false,
+      "interfaces": [
+        {
+          "id": "06ea1e75-2080-4353-9e2a-17b0e8b5ed09",
+          "switchMode": "access",
+          "accessVlan": 1,
+          "nativeVlan": 1,
+          "allowedVlans": [
+            1,
+            10,
+            20
+          ],
+          "ip": "10.244.1.1",
+          "prefix": 24,
+          "gateway": "",
+          "dns": "",
+          "mode": "manual",
+          "kind": "virtual",
+          "profile": "virtual",
+          "interfaceRole": "bridge-l3",
+          "name": "cni0"
+        }
+      ],
+      "services": {},
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      },
+      "members": [
+        "2a2ff23d-5392-4557-a3c1-b2771328667b"
+      ]
+    },
+    {
+      "id": "19cff9f3-54b0-4a4b-9baf-586d0f5c6625",
+      "type": "pod",
+      "parent": "60f873bd-ae69-4e7f-9b0e-3d401d9eb23d",
+      "x": 24,
+      "y": 340,
+      "w": 260,
+      "h": 160,
+      "name": "nginx-1 · demo / app=nginx",
+      "collapsed": false,
+      "interfaces": [
+        {
+          "id": "81b1a3b0-f166-4648-b191-5e70cd4e4b53",
+          "switchMode": "access",
+          "accessVlan": 1,
+          "nativeVlan": 1,
+          "allowedVlans": [
+            1,
+            10,
+            20
+          ],
+          "ip": "10.244.1.10",
+          "prefix": 24,
+          "gateway": "10.244.1.1",
+          "dns": "",
+          "mode": "manual",
+          "kind": "virtual",
+          "profile": "virtual",
+          "interfaceRole": "container-nic",
+          "name": "eth0"
+        }
+      ],
+      "services": {
+        "pod": {
+          "namespace": "demo",
+          "status": "running",
+          "labels": "app=nginx",
+          "ready": true
+        }
+      },
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      }
+    },
+    {
+      "id": "c451c17d-2aef-4425-bbfc-d1c94785749d",
+      "type": "k8s_container",
+      "parent": "19cff9f3-54b0-4a4b-9baf-586d0f5c6625",
+      "x": 24,
+      "y": 120,
+      "w": 260,
+      "h": 160,
+      "name": "nginx · контейнер",
+      "collapsed": false,
+      "interfaces": [],
+      "services": {
+        "runtime": {
+          "image": "nginx:alpine",
+          "status": "running",
+          "restart": "unless-stopped",
+          "command": "nginx -g \"daemon off;\"",
+          "environment": "",
+          "volumes": "",
+          "cpu": "1",
+          "memory": "256MiB",
+          "network": "pod"
+        }
+      },
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      }
+    },
+    {
+      "id": "64f24878-7aec-447a-b58c-c908637ce81c",
+      "type": "application",
+      "parent": "c451c17d-2aef-4425-bbfc-d1c94785749d",
+      "x": 24,
+      "y": 100,
+      "w": 260,
+      "h": 160,
+      "name": "Nginx · учебный сайт",
+      "collapsed": false,
+      "interfaces": [],
+      "services": {
+        "http": {
+          "port": 80,
+          "enabled": true
+        },
+        "process": {
+          "command": "nginx -g \"daemon off;\""
+        }
+      },
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      }
+    },
+    {
+      "id": "cd026c66-9076-49c1-b74e-5c38a5850136",
+      "type": "server",
+      "parent": null,
+      "x": 2350,
+      "y": 730,
+      "w": 260,
+      "h": 160,
+      "name": "SRV-03 · Proxmox",
+      "collapsed": false,
+      "interfaces": [
+        {
+          "id": "ba466a79-c040-4442-962d-f9ff664a7ed1",
+          "switchMode": "access",
+          "accessVlan": 1,
+          "nativeVlan": 1,
+          "allowedVlans": [
+            1,
+            10,
+            20
+          ],
+          "ip": "",
+          "prefix": 24,
+          "gateway": "",
+          "dns": "",
+          "mode": "auto",
+          "kind": "physical",
+          "profile": "rj45",
+          "interfaceRole": "physical-nic",
+          "name": "eno1"
+        }
+      ],
+      "services": {},
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      }
+    },
+    {
+      "id": "fe193b46-3d9d-4a08-bfb5-a5e9e6145aba",
+      "type": "proxmox",
+      "parent": "cd026c66-9076-49c1-b74e-5c38a5850136",
+      "x": 24,
+      "y": 120,
+      "w": 260,
+      "h": 160,
+      "name": "PVE-03",
+      "collapsed": false,
+      "interfaces": [],
+      "services": {},
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      },
+      "clusterId": "1455fc5b-ec90-4b0f-941d-deed80065c2d"
+    },
+    {
+      "id": "40d371c1-9707-4c60-a09e-f19be4f5e226",
+      "type": "bridge",
+      "parent": "fe193b46-3d9d-4a08-bfb5-a5e9e6145aba",
+      "x": 24,
+      "y": 100,
+      "w": 250,
+      "h": 160,
+      "name": "vmbr0 · LAN → ВМ",
+      "collapsed": false,
+      "interfaces": [
+        {
+          "id": "e32fc1d0-210a-4e9a-9c7c-62295d019617",
+          "switchMode": "access",
+          "accessVlan": 1,
+          "nativeVlan": 1,
+          "allowedVlans": [
+            1,
+            10,
+            20
+          ],
+          "ip": "10.10.0.13",
+          "prefix": 24,
+          "gateway": "",
+          "dns": "",
+          "mode": "manual",
+          "kind": "virtual",
+          "profile": "virtual",
+          "interfaceRole": "bridge-l3",
+          "name": "vmbr0"
+        }
+      ],
+      "services": {},
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      },
+      "members": [
+        "ba466a79-c040-4442-962d-f9ff664a7ed1",
+        "a65cba56-3403-4a50-ba4c-b481423ed9f5"
+      ]
+    },
+    {
+      "id": "0c300ec4-d128-4e16-9942-193bddddd390",
+      "type": "vm",
+      "parent": "fe193b46-3d9d-4a08-bfb5-a5e9e6145aba",
+      "x": 370,
+      "y": 100,
+      "w": 260,
+      "h": 160,
+      "name": "VM 103 · worker-02",
+      "collapsed": false,
+      "interfaces": [
+        {
+          "id": "a65cba56-3403-4a50-ba4c-b481423ed9f5",
+          "switchMode": "access",
+          "accessVlan": 1,
+          "nativeVlan": 1,
+          "allowedVlans": [
+            1,
+            10,
+            20
+          ],
+          "ip": "",
+          "prefix": 24,
+          "gateway": "",
+          "dns": "",
+          "mode": "auto",
+          "kind": "virtual",
+          "profile": "virtual",
+          "interfaceRole": "vm-nic",
+          "name": "net0 · virtio"
+        }
+      ],
+      "services": {},
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      }
+    },
+    {
+      "id": "5edaf10a-97f7-486b-bba7-98a52a8b2409",
+      "type": "ubuntu",
+      "parent": "0c300ec4-d128-4e16-9942-193bddddd390",
+      "x": 24,
+      "y": 120,
+      "w": 260,
+      "h": 160,
+      "name": "Ubuntu · worker-02",
+      "collapsed": false,
+      "interfaces": [
+        {
+          "id": "312ef9d9-2ade-4fa2-92a6-401a104a5f8e",
+          "switchMode": "access",
+          "accessVlan": 1,
+          "nativeVlan": 1,
+          "allowedVlans": [
+            1,
+            10,
+            20
+          ],
+          "ip": "10.10.0.22",
+          "prefix": 24,
+          "gateway": "",
+          "dns": "",
+          "mode": "manual",
+          "kind": "virtual",
+          "profile": "virtual",
+          "interfaceRole": "guest-nic",
+          "name": "eth0"
+        },
+        {
+          "id": "d2c3e853-5cbc-442a-965f-78c1bd48565a",
+          "switchMode": "access",
+          "accessVlan": 1,
+          "nativeVlan": 1,
+          "allowedVlans": [
+            1,
+            10,
+            20
+          ],
+          "ip": "",
+          "prefix": 24,
+          "gateway": "",
+          "dns": "",
+          "mode": "manual",
+          "kind": "virtual",
+          "profile": "virtual",
+          "interfaceRole": "veth",
+          "name": "veth-nginx-2"
+        }
+      ],
+      "services": {
+        "cni": {
+          "enabled": true,
+          "mode": "routed-host-gw",
+          "routes": [
+            {
+              "cidr": "10.244.1.0/24",
+              "via": "10.10.0.21"
+            }
+          ]
+        }
+      },
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      }
+    },
+    {
+      "id": "104d2d29-27a6-4ce5-9d22-752de6c90f45",
+      "type": "k8s_node",
+      "parent": "5edaf10a-97f7-486b-bba7-98a52a8b2409",
+      "x": 500,
+      "y": 300,
+      "w": 260,
+      "h": 160,
+      "name": "worker-02",
+      "collapsed": false,
+      "interfaces": [],
+      "services": {
+        "kubernetes": {
+          "role": "worker",
+          "runtime": "containerd",
+          "version": "",
+          "cni": "routed CNI / host-gw · без VXLAN",
+          "podCIDR": "10.244.2.0/24",
+          "controlModel": 1,
+          "runtimeId": "0b9b3c46-280b-4827-9976-1ca899d32415"
+        }
+      },
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      },
+      "clusterId": "c46b4636-fd9a-425c-b8a5-9c19f5a2d221"
+    },
+    {
+      "id": "488f2fdb-9dc7-46df-ae18-65ac3c954b33",
+      "type": "bridge",
+      "parent": "5edaf10a-97f7-486b-bba7-98a52a8b2409",
+      "x": 24,
+      "y": 300,
+      "w": 250,
+      "h": 160,
+      "name": "cni0 · 10.244.2.0/24",
+      "collapsed": false,
+      "interfaces": [
+        {
+          "id": "de764763-b8b2-4a63-af76-8c318c89699e",
+          "switchMode": "access",
+          "accessVlan": 1,
+          "nativeVlan": 1,
+          "allowedVlans": [
+            1,
+            10,
+            20
+          ],
+          "ip": "10.244.2.1",
+          "prefix": 24,
+          "gateway": "",
+          "dns": "",
+          "mode": "manual",
+          "kind": "virtual",
+          "profile": "virtual",
+          "interfaceRole": "bridge-l3",
+          "name": "cni0"
+        }
+      ],
+      "services": {},
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      },
+      "members": [
+        "d2c3e853-5cbc-442a-965f-78c1bd48565a"
+      ]
+    },
+    {
+      "id": "c66f490a-bd03-415e-9cdd-139c8ca72f72",
+      "type": "pod",
+      "parent": "104d2d29-27a6-4ce5-9d22-752de6c90f45",
+      "x": 24,
+      "y": 340,
+      "w": 260,
+      "h": 160,
+      "name": "nginx-2 · demo / app=nginx",
+      "collapsed": false,
+      "interfaces": [
+        {
+          "id": "0fe812da-e9aa-4ac2-9837-d7a85d130172",
+          "switchMode": "access",
+          "accessVlan": 1,
+          "nativeVlan": 1,
+          "allowedVlans": [
+            1,
+            10,
+            20
+          ],
+          "ip": "10.244.2.10",
+          "prefix": 24,
+          "gateway": "10.244.2.1",
+          "dns": "",
+          "mode": "manual",
+          "kind": "virtual",
+          "profile": "virtual",
+          "interfaceRole": "container-nic",
+          "name": "eth0"
+        }
+      ],
+      "services": {
+        "pod": {
+          "namespace": "demo",
+          "status": "running",
+          "labels": "app=nginx",
+          "ready": true
+        }
+      },
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      }
+    },
+    {
+      "id": "d9961a00-5bc1-4516-a29a-7bcebb056973",
+      "type": "k8s_container",
+      "parent": "c66f490a-bd03-415e-9cdd-139c8ca72f72",
+      "x": 24,
+      "y": 120,
+      "w": 260,
+      "h": 160,
+      "name": "nginx · контейнер",
+      "collapsed": false,
+      "interfaces": [],
+      "services": {
+        "runtime": {
+          "image": "nginx:alpine",
+          "status": "running",
+          "restart": "unless-stopped",
+          "command": "nginx -g \"daemon off;\"",
+          "environment": "",
+          "volumes": "",
+          "cpu": "1",
+          "memory": "256MiB",
+          "network": "pod"
+        }
+      },
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      }
+    },
+    {
+      "id": "1126be23-6199-429e-9543-6f0959f49c98",
+      "type": "application",
+      "parent": "d9961a00-5bc1-4516-a29a-7bcebb056973",
+      "x": 24,
+      "y": 100,
+      "w": 260,
+      "h": 160,
+      "name": "Nginx · учебный сайт",
+      "collapsed": false,
+      "interfaces": [],
+      "services": {
+        "http": {
+          "port": 80,
+          "enabled": true
+        },
+        "process": {
+          "command": "nginx -g \"daemon off;\""
+        }
+      },
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      }
+    },
+    {
+      "id": "a81669c0-d785-47d7-a686-5db74563b2e8",
+      "type": "containerd",
+      "parent": "8ac7d023-8b31-4d0b-a1af-b2ca2ef0851a",
+      "x": 270,
+      "y": 220,
+      "w": 260,
+      "h": 160,
+      "name": "containerd",
+      "collapsed": false,
+      "interfaces": [],
+      "services": {
+        "daemon": {
+          "endpoint": "unix:///run/containerd/containerd.sock",
+          "namespace": "k8s.io",
+          "version": ""
+        }
+      },
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      }
+    },
+    {
+      "id": "21b53ee7-7613-48ed-8b9e-ef2befda2c9c",
+      "type": "kubelet",
+      "parent": "8ac7d023-8b31-4d0b-a1af-b2ca2ef0851a",
+      "x": 24,
+      "y": 100,
+      "w": 260,
+      "h": 160,
+      "name": "kubelet",
+      "collapsed": false,
+      "interfaces": [],
+      "services": {
+        "agent": {
+          "runtimeId": "",
+          "version": ""
+        }
+      },
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      }
+    },
+    {
+      "id": "41a5434a-a5e6-4588-855b-8397c007f6d4",
+      "type": "containerd",
+      "parent": "60f873bd-ae69-4e7f-9b0e-3d401d9eb23d",
+      "x": 270,
+      "y": 220,
+      "w": 260,
+      "h": 160,
+      "name": "containerd",
+      "collapsed": false,
+      "interfaces": [],
+      "services": {
+        "daemon": {
+          "endpoint": "unix:///run/containerd/containerd.sock",
+          "namespace": "k8s.io",
+          "version": ""
+        }
+      },
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      }
+    },
+    {
+      "id": "fd192759-7158-40b7-83c3-10657d611667",
+      "type": "kubelet",
+      "parent": "60f873bd-ae69-4e7f-9b0e-3d401d9eb23d",
+      "x": 24,
+      "y": 100,
+      "w": 260,
+      "h": 160,
+      "name": "kubelet",
+      "collapsed": false,
+      "interfaces": [],
+      "services": {
+        "agent": {
+          "runtimeId": "",
+          "version": ""
+        }
+      },
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      }
+    },
+    {
+      "id": "0b9b3c46-280b-4827-9976-1ca899d32415",
+      "type": "containerd",
+      "parent": "104d2d29-27a6-4ce5-9d22-752de6c90f45",
+      "x": 270,
+      "y": 220,
+      "w": 260,
+      "h": 160,
+      "name": "containerd",
+      "collapsed": false,
+      "interfaces": [],
+      "services": {
+        "daemon": {
+          "endpoint": "unix:///run/containerd/containerd.sock",
+          "namespace": "k8s.io",
+          "version": ""
+        }
+      },
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      }
+    },
+    {
+      "id": "c631acc7-b254-4fd8-8284-8e8e469ff07d",
+      "type": "kubelet",
+      "parent": "104d2d29-27a6-4ce5-9d22-752de6c90f45",
+      "x": 24,
+      "y": 100,
+      "w": 260,
+      "h": 160,
+      "name": "kubelet",
+      "collapsed": false,
+      "interfaces": [],
+      "services": {
+        "agent": {
+          "runtimeId": "",
+          "version": ""
+        }
+      },
+      "rules": {
+        "blockICMP": false,
+        "blockedPorts": []
+      }
+    }
+  ],
+  "links": [
+    {
+      "id": "2e8d1d62-7bfb-4cca-ad80-f25940483258",
+      "a": "81bcf264-c1bb-4779-aa18-7b40ae50e896",
+      "b": "a1f4602f-4a75-45fe-a599-5a468a3f6e64",
+      "medium": "copper",
+      "length": 3
+    },
+    {
+      "id": "34461ef2-51d1-45d8-b71f-b9b7821402bf",
+      "a": "5c571ea9-ac06-4d74-8856-dad532bfd26b",
+      "b": "5d628a0b-8ee4-44eb-8105-e2cb4a66abd2",
+      "medium": "copper",
+      "length": 3
+    },
+    {
+      "id": "89edca1e-1b19-46c4-80e3-454cddcd6ac5",
+      "a": "3afdd893-4ffe-406d-b3ca-4aec147e693c",
+      "b": "d9f33855-5fa9-4253-ae00-26080a157fcb",
+      "medium": "adapter",
+      "length": 0
+    },
+    {
+      "id": "38456a1b-5cd1-447e-bd74-8f77d5aca1b4",
+      "a": "7cd48def-bf5d-4353-a126-fd16dd20261f",
+      "b": "1f9ffbdf-4d22-4bf2-8b73-76e474f2cac6",
+      "medium": "copper",
+      "length": 3
+    },
+    {
+      "id": "28bcf13d-ca4d-49e4-8c97-2f4cc64a2181",
+      "a": "804632d1-faf0-4831-a05f-1bcb2e10a8c5",
+      "b": "65a4267b-f8c5-4971-a54d-aa19f5b8846d",
+      "medium": "adapter",
+      "length": 0
+    },
+    {
+      "id": "db14d37b-cb60-4bd4-97ea-5cb3837596ea",
+      "a": "9654ef8a-453a-4520-a4fa-c16b7331b4c9",
+      "b": "1d046cd0-d707-4e12-8b55-a715b26afc0e",
+      "medium": "copper",
+      "length": 3
+    },
+    {
+      "id": "e8051686-929c-415b-a119-cc4ab8ebee77",
+      "a": "2a2ff23d-5392-4557-a3c1-b2771328667b",
+      "b": "81b1a3b0-f166-4648-b191-5e70cd4e4b53",
+      "medium": "virtual",
+      "length": 0,
+      "kind": "veth"
+    },
+    {
+      "id": "4ce3560f-7d34-4ae5-bc39-4ed84cdb631f",
+      "a": "a65cba56-3403-4a50-ba4c-b481423ed9f5",
+      "b": "312ef9d9-2ade-4fa2-92a6-401a104a5f8e",
+      "medium": "adapter",
+      "length": 0
+    },
+    {
+      "id": "97d19a5f-6c0f-4dd4-b6fd-00e33e9c1f53",
+      "a": "51310c33-9ad6-4158-b438-14d5306f757e",
+      "b": "ba466a79-c040-4442-962d-f9ff664a7ed1",
+      "medium": "copper",
+      "length": 3
+    },
+    {
+      "id": "cb3a277b-64ba-43a5-ba8b-110563e5d2c7",
+      "a": "d2c3e853-5cbc-442a-965f-78c1bd48565a",
+      "b": "0fe812da-e9aa-4ac2-9837-d7a85d130172",
+      "medium": "virtual",
+      "length": 0,
+      "kind": "veth"
+    }
+  ],
+  "subnets": [],
+  "demoRevision": 6,
+  "demoRequest": {
+    "target": "site.lab",
+    "protocol": "tcp",
+    "port": 30080
+  },
+  "demoGuide": [
+    "Node = Ubuntu-ВМ. Блок kubelet/containerd внутри — логическая группа управления Pod, без собственного NIC.",
+    "Routed CNI / host-gw: cni0 и veth находятся в ядре Ubuntu; общий eth0 и IP Pod используются контейнером и Nginx. CNI с Linux-мостом — выбранный вариант демо, не универсальное устройство всех Kubernetes-сетей.",
+    "Клиент → site.lab = worker-01 (10.10.0.21):30080. Service Cluster выбирает предпочтительный готовый Pod на worker-02.",
+    "На worker-01: DNAT назначения → 10.244.2.10:80; MASQUERADE/SNAT источника → адрес выходного интерфейса worker-01.",
+    "Маршрут 10.244.2.0/24 via 10.10.0.22: eth0 → virtio VM 102 → vmbr0 PVE-02 → eno1 → SW-LAN → eno1 PVE-03 → vmbr0 → virtio VM 103 → eth0 worker-02.",
+    "Ядро worker-02: маршрутизация eth0 → cni0 → veth ↔ eth0 Pod → общий namespace → контейнер → приложение Nginx. Между Ubuntu и блоком kubelet нет дополнительного кабеля.",
+    "Ответ Pod идёт через worker-02 и физическую LAN назад на worker-01; conntrack отменяет SNAT и DNAT, затем ответ возвращается клиенту.",
+    "В свойствах Service: «Отказать выбранному Pod» → новый запрос. Endpoint исключается, трафик переключается на вторую готовую реплику. Уже установленное TCP-соединение не переносится.",
+    "Local/Cluster переключаются у Service. Предпочтительный Pod — детерминированный выбор для демонстрации, не реальный алгоритм балансировщика Kubernetes.",
+    "Для сравнения откройте «Логическая сеть». Штрихпунктир — членство в кластере; весь пользовательский трафик идёт по портам и кабелям."
+  ]
+}

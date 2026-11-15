@@ -1,0 +1,10 @@
+node_modules/
+coverage/
+.runtime/
+*.log
+.env
+.env.*
+hub-current.html
+__pycache__/
+*.pyc
+*.tar.gz
