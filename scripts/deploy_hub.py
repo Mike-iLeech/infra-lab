@@ -1,6 +1,7 @@
 """Install reviewed static assets on the iLeech Tools host; publish its card last."""
 from pathlib import Path
 import argparse
+from contextlib import contextmanager
 import hashlib
 import json
 import os
@@ -69,7 +70,31 @@ def unpack(archive, stage):
         return manifest
 
 
+@contextmanager
+def deploy_lock(web):
+    lock = web / '.infra-lab-deploy.lock'
+    fd = os.open(lock, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    identity = os.fstat(fd)
+    try:
+        os.write(fd, str(os.getpid()).encode())
+        yield
+    finally:
+        os.close(fd)
+        try:
+            current = lock.stat()
+            if (current.st_dev, current.st_ino) == (identity.st_dev, identity.st_ino):
+                lock.unlink()
+        except FileNotFoundError:
+            pass
+
+
 def deploy(archive, expected_hub_sha, release, web=Path('/var/www/ileech'), backup_root=Path('/root/infra-lab-backups'), check_url='http://127.0.0.1/infra-lab/'):
+    web = web.resolve(strict=True)
+    with deploy_lock(web):
+        return deploy_locked(archive, expected_hub_sha, release, web, backup_root, check_url)
+
+
+def deploy_locked(archive, expected_hub_sha, release, web, backup_root, check_url):
     if not re.fullmatch(r'[a-f0-9]{40}', release) or not re.fullmatch(r'[a-f0-9]{64}', expected_hub_sha):
         raise ValueError('Expected reviewed commit SHA and current hub SHA256')
     web = web.resolve(strict=True)
@@ -100,12 +125,13 @@ def deploy(archive, expected_hub_sha, release, web=Path('/var/www/ileech'), back
         with urllib.request.urlopen(check_url, timeout=15) as response:
             if response.status != 200 or response.read() != (live / 'index.html').read_bytes():
                 raise ValueError('The deployed application did not pass HTTP verification')
-        # Compare again immediately before publishing the new hub entry.
-        if digest(hub.read_bytes()) != expected_hub_sha:
-            raise ValueError('Concurrent hub change: card not published')
         tmp = web / ('index.html.infra-lab-' + suffix)
         tmp.write_bytes(updated)
         tmp.chmod(0o644)
+        # Cooperative publishers hold the same lock. Recheck the live bytes after
+        # preparing the temporary file; arbitrary writers must also honor the lock.
+        if digest(hub.read_bytes()) != expected_hub_sha:
+            raise ValueError('Concurrent hub change: card not published')
         os.replace(tmp, hub)
     except Exception:
         # Retain the failed release for inspection, then restore the previous app.

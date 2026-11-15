@@ -98,6 +98,43 @@ class DeploymentTests(unittest.TestCase):
                 module.deploy(self.archive(root), '0' * 64, 'c' * 40, web, root / 'backups')
             self.assertFalse((web / 'infra-lab').exists())
 
+    def test_change_during_http_check_keeps_external_hub_and_rolls_back_app(self):
+        with tempfile.TemporaryDirectory(dir=self.workspace) as tmp:
+            root = Path(tmp)
+            web = root / 'web'
+            web.mkdir()
+            original = b'const apps = [\n];'
+            concurrent = b'const apps = [\n{name:"Other",url:"/other/"}\n];'
+            (web / 'index.html').write_bytes(original)
+            class Response:
+                status = 200
+                def __enter__(self):
+                    return self
+                def __exit__(self, *args):
+                    return False
+                def read(self):
+                    (web / 'index.html').write_bytes(concurrent)
+                    return (web / 'infra-lab' / 'index.html').read_bytes()
+            with patch.object(module.urllib.request, 'urlopen', return_value=Response()):
+                with self.assertRaisesRegex(ValueError, 'Concurrent hub change'):
+                    module.deploy(self.archive(root), module.digest(original), 'd' * 40, web, root / 'backups')
+            self.assertEqual((web / 'index.html').read_bytes(), concurrent)
+            self.assertFalse((web / 'infra-lab').exists())
+            self.assertFalse((web / '.infra-lab-deploy.lock').exists())
+
+    def test_another_deployment_lock_prevents_writes(self):
+        with tempfile.TemporaryDirectory(dir=self.workspace) as tmp:
+            root = Path(tmp)
+            web = root / 'web'
+            web.mkdir()
+            original = b'const apps = [\n];'
+            (web / 'index.html').write_bytes(original)
+            with module.deploy_lock(web):
+                with self.assertRaises(FileExistsError):
+                    module.deploy(self.archive(root), module.digest(original), 'e' * 40, web, root / 'backups')
+            self.assertEqual((web / 'index.html').read_bytes(), original)
+            self.assertFalse((web / 'infra-lab').exists())
+
 
 if __name__ == '__main__':
     unittest.main()
