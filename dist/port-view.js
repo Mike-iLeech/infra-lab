@@ -1,7 +1,7 @@
 import {PASSIVE,getProfile} from './physical.js';
 import {LAG_MODES} from './lag.js';
 export const vlanColor=v=>`hsl(${(Number(v)*137.508+30)%360} 64% 63%)`;
-export function portRow(n){return n.type==='switch'?58:PASSIVE.includes(n.type)?42:n.type==='bridge'?42:28}
+export function portRow(n){return (n.type==='switch'?72:n.type==='bridge'?76:64)+(n.interfaces.some(p=>p.lagGroup)?14:0)}
 export function portView(n,p){
  const index=n.interfaces.findIndex(a=>a.id===p.id),passive=PASSIVE.includes(n.type),switching=['switch','bridge'].includes(n.type);
  const pair=p.pairIndex||Math.floor(index/2)+1;const name=passive&&index>=0?`PORT ${pair} ${index%2?'OUT':'IN'}`:p.name;

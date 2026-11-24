@@ -1,0 +1,63 @@
+/* Port rows keep their anchors on node boundaries; decoration never moves a wire endpoint. */
+.node {border-radius:12px;box-shadow:0 5px 18px #030a1326}
+.nodehead {border-bottom:1px solid #91b2cb12}
+.node>.ports {padding:0}
+.node>.ports>.port {padding:5px 14px;min-width:0;isolation:isolate;text-align:left;color:#c9dbe8}
+.node>.ports>.port::after {content:'';position:absolute;inset:3px 5px;z-index:-1;background:#101c2a50;border:1px solid #8aabc01c;border-radius:6px;pointer-events:none}
+.node>.ports>.port:hover::after,.node>.ports>.port:focus-visible::after {background:#28435380;border-color:#82c8da65}
+.node>.ports>.port:focus-visible {outline:2px solid #8ad9ed;outline-offset:-3px;z-index:3}
+.port-caption {width:100%;min-width:0;line-height:1.25;pointer-events:none}
+.port-name {min-height:16px;gap:6px;font-size:12px;line-height:16px}
+.port-label {font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.port-role {font-size:8px;line-height:12px;padding:1px 5px;letter-spacing:.4px;border:1px solid #cce5ef1a}
+.port-role.l3 {background:#58462b;color:#ffe1a0}
+.port-role.in,.port-role.out {background:#293b55;color:#aacff4}
+.port-technology {display:flex;gap:5px;align-items:center;min-width:0;margin-top:3px;color:#829caf;font-size:9px;line-height:13px;white-space:nowrap}
+.port-technology>span {overflow:hidden;text-overflow:ellipsis;min-width:0}
+.port-technology .interface-kind {font-size:8px;font-weight:600;letter-spacing:.3px;color:#8fc5dc;border:1px solid #5b85923b;border-radius:3px;padding:0 3px;background:#3f6c7f18!important}
+.port-state {margin-left:auto;font-size:8px;color:#8b9cae;flex-shrink:0}
+.port-connected .port-state {color:#80cfb4}
+.port-fault .port-state {color:#ffa695}
+.port-reserve .port-state {color:#edce8a}
+.port-meta {font-size:10px;line-height:14px;margin-top:3px;color:#b2c8d9}
+.bridge-port-owner {font-size:9px;color:#83bfc4;line-height:12px;margin-top:1px}
+.lag-badge {font-size:9px;line-height:12px;margin-top:2px;color:#e8cd8a}
+.port-dot {width:12px;height:12px;top:calc(50% - 6px);left:-7px;box-shadow:0 0 0 3px #132232;transition:background .12s,border-color .12s}
+.right-port .port-dot {right:-7px}
+.physical-port .port-dot {border-radius:3px}
+.virtual-port .port-dot {border-radius:50%;border-style:dashed;background:#193c47}
+.port-fault .port-dot {background:#b94c48!important;border-color:#ffb4a5!important}
+.port-reserve .port-dot {background:#8b713b;border-color:#ebca86}
+.port.pending .port-dot,.port.endpoint .port-dot {box-shadow:0 0 0 4px #ffd17c35}
+.node>.ports>.right-port {text-align:left;justify-content:initial}
+.right-port .port-name {justify-content:initial}
+.right-port .port-role {margin-left:auto}
+.vlan-colors .structured-port {background:transparent;border-bottom:0}
+.vlan-colors .structured-port::after {height:auto;inset:3px 5px;border:1px solid #8aabc01c;border-left:3px solid var(--vlan-color);background:color-mix(in srgb,var(--vlan-color) 7%,#142030)}
+.vlan-colors .structured-port .port-meta {color:#c2d6df}
+.member-slot .port-caption {font-size:10px;color:#cbb6ef;overflow:hidden;text-overflow:ellipsis}
+.cable.selected .wire,.cable.highlighted .wire {stroke:#ffd17c!important;stroke-width:2.8;opacity:1}
+.cable.physical-fault.selected .wire,.cable.physical-fault.highlighted .wire {stroke:#ff9386!important}
+.trace-mode .cable.trace-wire-visited .wire {stroke:#73ddb7!important}
+.trace-mode .cable.trace-wire-active .wire {stroke:#ffe29a!important}
+.trace-mode .cable.trace-wire-failed .wire {stroke:#ff8a7c!important}
+.nodefoot {font-size:10px;color:#8fa8bb}
+.connection-endpoint {padding:12px;border:1px solid #345064;background:#132333;border-radius:9px;margin:10px 0}
+.connection-endpoint .endpoint-tag {font-size:9px;letter-spacing:1px;color:#81bfc8}
+.connection-endpoint b {display:block;margin:5px 0;font-size:13px;overflow-wrap:anywhere}
+.connection-endpoint p {font-family:Consolas,monospace;margin:4px 0;font-size:11px;color:#b8d4df}
+.connection-endpoint button {width:100%;margin-top:8px;font-size:11px}
+.connection-health {border:1px solid #396359;border-radius:7px;padding:10px 12px;color:#a1dfc9;background:#233d3638;font-size:11px;line-height:1.6;overflow-wrap:anywhere}
+.connection-health.fault {border-color:#985952;color:#ffbdaf;background:#6a302b38}
+.interface-summary {display:flex;align-items:center;gap:7px;width:100%;font-size:12px;list-style:none}
+.interface-summary::after {content:'⌄';margin-left:auto;color:#819db6}
+.interface[open]>.interface-summary::after {content:'⌃'}
+.interface-summary::-webkit-details-marker {display:none}
+.interface-summary .summary-name {min-width:0;overflow:hidden;text-overflow:ellipsis}
+.interface-summary .summary-kind {font-size:9px;color:#83bad2}
+.interface-summary .summary-state {width:7px;height:7px;border-radius:50%;background:#7891a8;flex-shrink:0}
+.interface-summary .summary-state.connected {background:#79d9b7}
+.interface-summary .summary-state.fault {background:#ff9588}
+.interface-summary .summary-state.reserve {background:#e6c878}
+.interface-status {font-size:10px;color:#8bb6be;line-height:1.6;margin:8px 0;overflow-wrap:anywhere}
+.interface-status.fault {color:#ffb5a5}
