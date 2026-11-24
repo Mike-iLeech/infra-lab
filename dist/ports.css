@@ -38,6 +38,9 @@
 .member-slot .port-caption {font-size:10px;color:#cbb6ef;overflow:hidden;text-overflow:ellipsis}
 .cable.selected .wire,.cable.highlighted .wire {stroke:#ffd17c!important;stroke-width:2.8;opacity:1}
 .cable.physical-fault.selected .wire,.cable.physical-fault.highlighted .wire {stroke:#ff9386!important}
+.trace-mode .cable.trace-wire-visited .wire {stroke:#73ddb7!important}
+.trace-mode .cable.trace-wire-active .wire {stroke:#ffe29a!important}
+.trace-mode .cable.trace-wire-failed .wire {stroke:#ff8a7c!important}
 .nodefoot {font-size:10px;color:#8fa8bb}
 .connection-endpoint {padding:12px;border:1px solid #345064;background:#132333;border-radius:9px;margin:10px 0}
 .connection-endpoint .endpoint-tag {font-size:9px;letter-spacing:1px;color:#81bfc8}
