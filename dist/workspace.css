@@ -1,0 +1,226 @@
+/* Workspace chrome. Port geometry and connections live in their own styles. */
+:root {
+  color-scheme: dark;
+  --workspace-surface: #151e2b;
+  --workspace-raised: #1b2736;
+  --workspace-border: #2c3a4d;
+  --workspace-muted: #9bacc0;
+  --workspace-accent: #8adbc7;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+}
+
+body > header {
+  flex-shrink: 0;
+  height: auto;
+  min-height: 70px;
+  padding: 12px 22px;
+  gap: 14px 22px;
+  flex-wrap: wrap;
+  background: #131c28;
+  border-color: var(--workspace-border);
+}
+
+body > header .brand { gap: 10px; font-size: 23px; flex-shrink: 0; }
+body > header .logo { font-size: 25px; padding: 3px 8px; border-radius: 9px; }
+body > header .brand small { display: block; font-size: 7px; letter-spacing: 1.4px; }
+body > header .project {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  flex: 1 1 190px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #c4d2e2;
+}
+body > header .project i { margin-right: 4px; }
+body > header .project span { color: #8495ab; white-space: nowrap; }
+body > header #hub-back { margin-right: 0; white-space: nowrap; }
+body > header .actions { flex-wrap: wrap; gap: 8px 12px; margin-left: auto; }
+.action-group { display: flex; align-items: center; gap: 6px; }
+.action-group + .action-group { padding-left: 12px; border-left: 1px solid var(--workspace-border); }
+
+body > header button,
+.canvasbar button,
+.left > button,
+.right button,
+dialog button {
+  border-color: #35465b;
+  background: #1d2b3d;
+  color: #cfdeee;
+  border-radius: 6px;
+  line-height: 1.35;
+  transition: background-color 120ms, border-color 120ms, color 120ms;
+}
+body > header button { padding: 7px 10px; font-size: 11px; white-space: nowrap; }
+body > header button:hover,
+.canvasbar button:hover,
+.left > button:hover,
+.right button:hover,
+dialog button:hover { background: #2a3c52; border-color: #5b738c; }
+body > header button:focus-visible,
+.canvasbar button:focus-visible,
+.left button:focus-visible,
+.right button:focus-visible,
+dialog button:focus-visible { outline-color: #8adbc7; }
+
+.layout {
+  flex: 1;
+  height: auto;
+  min-height: 0;
+  grid-template-columns: 214px minmax(0, 1fr) 308px;
+}
+.left,
+.right { background: var(--workspace-surface); scrollbar-width: thin; scrollbar-color: #40516a transparent; }
+.left { display: block; padding: 23px 16px; border-color: var(--workspace-border); }
+.right { border-color: var(--workspace-border); }
+.left > .eyebrow,
+.right .eyebrow { font-size: 9px; letter-spacing: 1.3px; color: var(--workspace-accent); }
+.left > h2 { font-size: 23px; letter-spacing: -.7px; margin: 13px 0 10px; }
+.left > p { font-size: 11px; color: #a1b1c4; line-height: 1.65; margin: 0 0 19px; }
+.left > .primary,
+.right .primary,
+dialog .primary { background: #88d7c2; border-color: #88d7c2; color: #102f29; font-weight: 650; }
+.left > .primary { font-size: 11px; padding: 10px 8px; }
+.left > .primary:hover,
+.right .primary:hover,
+dialog .primary:hover { background: #a8e9d8; border-color: #a8e9d8; color: #102f29; }
+.left > .section { margin: 24px 2px 9px; font-size: 9px; letter-spacing: 1.3px; }
+#count { padding: 2px 6px; border: 1px solid #38485c; border-radius: 5px; color: #bdd0e2; font-variant-numeric: tabular-nums; }
+.left .treeitem { min-height: 32px; margin: 2px 0; border-radius: 5px; font-size: 11px; color: #b5c6d8; }
+.left .treeitem:hover { background: #213045; }
+.left .treeitem.selected { background: #223e42; color: #a4e8d7; box-shadow: inset 2px 0 #8adbc7; }
+.left .legend { margin-top: 22px; padding-top: 18px; border-color: var(--workspace-border); }
+.left .legend > b { color: #c3d4e5; font-size: 11px; font-weight: 600; }
+.left .legend p { color: #91a5bb; font-size: 10px; line-height: 1.9; }
+
+.canvasbar {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  min-height: 0;
+  padding: 11px 14px 12px;
+  gap: 10px;
+  background: #172231;
+  border-color: var(--workspace-border);
+}
+.canvasbar > .canvas-heading {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  min-width: 0;
+  line-height: 1.4;
+}
+.canvas-heading b { color: #d5e3ef; font-size: 12px; font-weight: 600; letter-spacing: .1px; }
+.canvasbar span#summary { display: inline; color: #8da2b9; font-size: 10px; }
+.canvas-heading #selection-count { margin-left: auto; font-size: 10px; color: #a3d4f5; }
+.canvasbar > div.workspace-tools {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 9px 14px;
+  min-width: 0;
+}
+.tool-group { display: flex; align-items: center; min-width: 0; max-width: 100%; gap: 7px; }
+.canvasbar .tool-label { padding-left: 1px; font-size: 8px; line-height: 1.4; text-transform: uppercase; letter-spacing: 1px; color: #98abc0; }
+.tool-buttons { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.canvasbar button { min-height: 29px; padding: 5px 8px; font-size: 10px; white-space: nowrap; }
+.canvasbar button[aria-pressed="true"] { background: #244341; border-color: #47796f; color: #b1ecdc; }
+.canvasbar button[aria-pressed="true"]:hover { background: #2b544e; border-color: #78b5a6; }
+.canvasbar #undo,
+.canvasbar #redo,
+.canvasbar #minus,
+.canvasbar #plus { min-width: 29px; padding-inline: 7px; }
+.canvasbar #undo,
+.canvasbar #redo { font-size: 16px; line-height: 1; }
+.canvasbar #zoomtext { min-width: 45px; padding-inline: 5px; }
+.canvasbar .zoom-tools .tool-buttons { flex-wrap: nowrap; gap: 3px; }
+.canvasbar button:disabled { background: #192535; border-color: #304054; opacity: .42; }
+
+.network-key { padding: 8px 14px; background: #15202d; border-color: var(--workspace-border); font-size: 10px; }
+.network-key > summary { line-height: 1.5; color: #9cb4c8; }
+.key-items { left: 8px; right: 8px; max-height: min(430px, 60vh); overflow: auto; padding: 12px 15px; background: #1c2b3d; border-color: #466078; border-radius: 7px; }
+.demo-guide { padding: 9px 14px; background: #193039; border-color: #345159; font-size: 10px; }
+.demo-guide > summary { color: #b0ded2; line-height: 1.5; }
+.demo-guide > button { margin: 3px 5px 3px 0; padding: 6px 8px; font-size: 10px; }
+.bottom { min-height: 29px; gap: 12px; padding-inline: 14px; background: #121c28; border-color: var(--workspace-border); color: #90a4bc; font-size: 9px; }
+
+.right .tabs { gap: 0; padding: 0 12px; background: var(--workspace-surface); border-color: var(--workspace-border); }
+.right .tabs button { flex: 1; min-height: 47px; padding: 14px 7px 12px; border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: transparent; color: #9fb1c7; font-size: 11px; }
+.right .tabs button:hover { background: #1c2a3b; color: #d1e1ef; }
+.right .tabs button.active { border-bottom-color: #8adbc7; color: #a8e5d5; }
+#inspect,
+#test { padding: 22px 17px 26px; }
+.right h2 { margin: 9px 0 14px; font-size: 21px; letter-spacing: -.55px; overflow-wrap: anywhere; }
+.right p { color: #9dafc4; font-size: 11px; line-height: 1.75; }
+.right label { margin-top: 15px; font-size: 10px; line-height: 1.5; color: #a8bacd; }
+.right input,
+.right select,
+.right textarea { margin-top: 6px; padding: 8px 9px; min-height: 33px; border-color: #354a60; background: #101b29; border-radius: 5px; color: #d6e5f2; font-size: 11px; }
+.right input:hover,
+.right select:hover,
+.right textarea:hover { border-color: #5a738c; }
+.right .row { gap: 9px; }
+.right .section { margin: 23px 0 10px; font-size: 9px; letter-spacing: 1.1px; color: #9ab0c5; }
+.right .interface { margin: 8px 0; padding: 10px; border-color: #32485c; background: #192638; border-radius: 6px; }
+.right .interface > summary { cursor: pointer; color: #c6d7e6; font-size: 11px; line-height: 1.55; overflow-wrap: anywhere; }
+.right .interface[open] > summary { padding-bottom: 9px; margin-bottom: 3px; border-bottom: 1px solid #2e4156; }
+.right .hint { padding: 11px 12px; margin-top: 15px; border: 1px solid #2a4054; background: #192a3b; border-radius: 6px; color: #9db3c7; font-size: 10px; line-height: 1.8; }
+.right .hint b { color: #c7dce8; font-weight: 600; }
+.right .help-card { border-left-color: #6ebba7; background: #1b2d3c; border-radius: 0 6px 6px 0; }
+.right .help-card p { font-size: 10px; }
+.right .delete { margin-top: 21px; border-color: #68474d; background: #372631; color: #edb3af; }
+.right .delete:hover { background: #512f39; border-color: #a1686c; }
+.right .selection-list > div { border-color: #2e4156; font-size: 11px; }
+#inspect:not(:has(button, input, select)) { padding-top: 30px; }
+#inspect:not(:has(button, input, select))::before { content: "⌖"; display: grid; place-items: center; width: 44px; height: 44px; margin-bottom: 22px; border: 1px solid #3a5667; border-radius: 11px; background: #1d333e; color: #91d7c7; font-size: 26px; }
+#inspect:not(:has(button, input, select)) > h2 { margin-top: 10px; }
+
+dialog { border-color: #4b647a; background: #1b2a3b; box-shadow: 0 20px 80px #0008; }
+dialog::backdrop { background: #08111bcc; backdrop-filter: blur(3px); }
+dialog .dialog-actions { align-items: center; }
+
+@media (max-width: 1200px) {
+  body > header { padding-inline: 17px; gap: 12px 16px; }
+  body > header .project { flex-basis: 170px; font-size: 10px; }
+  body > header .brand { font-size: 21px; }
+  body > header .brand small { font-size: 6px; letter-spacing: 1.1px; }
+  body > header button { padding-inline: 8px; font-size: 10px; }
+  .layout { grid-template-columns: 184px minmax(0, 1fr) 284px; }
+  .left { padding: 20px 13px; }
+  .left > h2 { font-size: 21px; }
+  .canvasbar { padding-inline: 12px; }
+  .canvasbar > div.workspace-tools { column-gap: 12px; }
+  #inspect,
+  #test { padding-inline: 14px; }
+}
+
+@media (max-width: 900px) {
+  body > header { min-height: 68px; padding: 10px 14px; }
+  body > header .project { flex-basis: 150px; }
+  body > header .actions { gap: 7px; }
+  .action-group + .action-group { padding-left: 8px; }
+  .layout { grid-template-columns: 164px minmax(300px, 1fr) 264px; overflow-x: auto; }
+  .left { display: block; padding-inline: 11px; }
+  .left > h2 { font-size: 20px; }
+  .canvasbar > div.workspace-tools { gap: 9px 10px; }
+  .canvasbar .tool-buttons { gap: 3px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body > header button,
+  .canvasbar button,
+  .left > button,
+  .right button,
+  dialog button { transition: none; }
+}

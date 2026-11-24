@@ -2,6 +2,7 @@ import {controlWires} from './control-wires.js';
 import {drawCniPaths} from './cni-canvas.js';
 import {clusterWires,workloadFoot} from './workload-ui.js';
 import {cancelCanvasAction} from './cancel-action.js';
+import {installConnectionUX,completeConnection} from './connection-ux.js';
 import {installRouteEditor} from './route-editor.js';
 import {installWireCrossings} from './wire-crossings.js';
 import {attachedBridgePorts,localBridgePaths} from './bridge-view.js';
@@ -12,7 +13,7 @@ import {portView,portRow,lassoSelection,vlanColor} from './port-view.js';
 import {lagStatus} from './lag.js';
 import {moveNodes} from './geometry.js';
 import { geometry, displayPorts, descendants, moveNode, zoomAt, routeCable, cableObstacles, pathData } from './geometry.js';
-import { TYPES, bridgeTypes, connect } from './model.js';
+import { TYPES, bridgeTypes } from './model.js';
 import {bindings} from './bridges.js';
 import {getProfile,MEDIA,physicalError} from './physical.js';
 import {HELP} from './help.js';
@@ -22,7 +23,7 @@ export class LabCanvas {
     Object.assign(this,options);installWireCrossings(this);this.viewport=document.getElementById('viewport');this.world=document.getElementById('world');
     this.host=document.getElementById('nodes');this.svg=document.getElementById('wires');installRouteEditor(this);this.zoom=.75;this.pending=null;this.selectedLink=null;this.selection=new Set();this.vlanColors=localStorage.getItem('infra-lab-vlan-colors')==='true';
     this.stage=document.createElement('div');this.stage.id='stage';this.world.before(this.stage);this.stage.append(this.world);
-    this.world.style.position='absolute';this.frame=null;this.drag=null;this.space=false;this.pointer=null;
+    this.world.style.position='absolute';this.frame=null;this.drag=null;this.space=false;this.pointer=null;installConnectionUX(this);
     try{const c=JSON.parse(localStorage.getItem('infra-lab-camera'));if(c&&Number.isFinite(c.zoom)){this.zoom=Math.max(.2,Math.min(2,c.zoom));this.initialCamera=c}}catch{}
     this.host.addEventListener('click',e=>this.click(e));
     this.host.addEventListener('pointerdown',e=>{this.selectedWireRoute=null;this.down(e)});
@@ -31,9 +32,9 @@ export class LabCanvas {
     window.addEventListener('blur',()=>{this.space=false;this.up()});
     this.viewport.addEventListener('wheel',e=>{e.preventDefault();if(e.shiftKey){this.viewport.scrollLeft+=e.deltaY;return}const r=this.viewport.getBoundingClientRect();this.setZoom(this.zoom*Math.exp(-e.deltaY*.0015),{x:e.clientX-r.left,y:e.clientY-r.top})},{passive:false});
     this.viewport.addEventListener('scroll',()=>this.remember());
-    document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea,select'))return;if(e.code==='Space'){this.space=true;e.preventDefault()}if(e.key==='Escape'){if(this.cancelActiveAction())return;this.pending=null;this.pointer=null;this.lasso=null;this.selection.clear();this.selectNodes?.([]);this.render()}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='a'&&document.activeElement?.closest('main')){e.preventDefault();this.selection=new Set(this.getState().nodes.filter(n=>!n.parent).map(n=>n.id));this.selectNodes?.([...this.selection]);this.render()}if(['+','=','-','0'].includes(e.key)){e.preventDefault();if(e.key==='0')this.fit();else this.setZoom(this.zoom*(e.key==='-'?1/1.2:1.2))}});
+    document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea,select'))return;if(e.code==='Space'&&!e.target.closest('button,a,[role=button],[contenteditable=true]')){this.space=true;e.preventDefault()}if(e.key==='Escape'){if(this.cancelActiveAction())return;this.pending=null;this.pointer=null;this.lasso=null;this.selection.clear();this.selectNodes?.([]);this.render()}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='a'&&document.activeElement?.closest('main')){e.preventDefault();this.selection=new Set(this.getState().nodes.filter(n=>!n.parent).map(n=>n.id));this.selectNodes?.([...this.selection]);this.render()}if(['+','=','-','0'].includes(e.key)){e.preventDefault();if(e.key==='0')this.fit();else this.setZoom(this.zoom*(e.key==='-'?1/1.2:1.2))}});
     document.addEventListener('keyup',e=>{if(e.code==='Space')this.space=false});
-    this.svg.addEventListener('click',e=>{const member=e.target.closest('[data-binding]');if(member){e.stopPropagation();this.selectNode(member.dataset.binding);this.render();return}const l=e.target.closest('[data-link]');if(!l)return;e.stopPropagation();this.selectedLink=l.dataset.link;this.selectLink(this.selectedLink);this.render()});
+    this.svg.addEventListener('click',e=>{const member=e.target.closest('[data-binding]');if(member){e.stopPropagation();this.selectNode(member.dataset.binding);this.render();return}const l=e.target.closest('[data-link]');if(!l)return;e.stopPropagation();this.selectedLink=l.dataset.link;this.selectedWireRoute='link:'+this.selectedLink;this.selectLink(this.selectedLink);this.render()});
     this.svg.addEventListener('pointerover',e=>{const l=e.target.closest('[data-link]');if(l)this.highlight(l.dataset.link)});
     this.svg.addEventListener('pointerout',()=>this.highlight(this.selectedLink));
   }
@@ -49,8 +50,9 @@ export class LabCanvas {
     this.zoom=Math.max(.2,Math.min(1.2,(this.viewport.clientWidth-20)/(maxX-minX),(this.viewport.clientHeight-20)/(maxY-minY)));
     this.render();this.viewport.scrollTo(minX*this.zoom,minY*this.zoom);this.remember();
   }
-  focus(id){const r=geometry(this.getState()).rects.get(id);if(!r)return;this.setZoom(Math.max(.75,this.zoom));this.viewport.scrollTo({left:Math.max(0,r.x*this.zoom-40),top:Math.max(0,r.y*this.zoom-40),behavior:'smooth'})}
+  focus(id){const state=this.getState();let node=state.nodes.find(n=>n.id===id),expanded=false;while(node?.parent){node=state.nodes.find(n=>n.id===node.parent);if(node?.collapsed){node.collapsed=false;expanded=true}}if(expanded)this.commit();const r=geometry(state).rects.get(id);if(!r)return;this.setZoom(Math.max(.75,this.zoom));this.viewport.scrollTo({left:Math.max(0,r.x*this.zoom-40),top:Math.max(0,r.y*this.zoom-40),behavior:'smooth'})}
   render(){
+    const focused=document.activeElement?.closest?.('[data-port]'),focusPort=focused&&{id:focused.dataset.port,node:focused.closest('.node')?.dataset.id};
     const state=this.getState();this.lag=lagStatus(state);this.g=geometry(state);const g=this.g;this.world.classList.toggle('vlan-colors',this.vlanColors);for(const id of this.selection)if(!state.nodes.some(n=>n.id===id))this.selection.delete(id);
     this.host.innerHTML='';
     const renderNode=(n,parent)=>{const d=g.sizes.get(n.id),el=document.createElement('div');el.className='node'+(this.selection.has(n.id)||this.getSelected()===n.id?' selected':'');el.dataset.id=n.id;el.dataset.type=n.type;
@@ -61,7 +63,8 @@ export class LabCanvas {
       if(!n.collapsed&&kernelSpace(state,n))el.insertAdjacentHTML('beforeend',kernelCardsHTML(state,n,48+Math.ceil(displayPorts(state,n).length/2)*portRow(n)+16));
       el.style.setProperty('--port-row',portRow(n)+'px');if(['patch_panel','fiber_panel'].includes(n.type)){const pairs=document.createElement('div');pairs.className='panel-pairs';pairs.innerHTML=n.interfaces.filter((p,i)=>i%2===0&&i+1<n.interfaces.length).map((p,i)=>'<span style="top:'+ (48+portRow(n)*(i+.5))+'px">⇄</span>').join('');el.append(pairs)}el.querySelector('.nodehead').title=HELP[n.type]?.text||'';const help=document.createElement('button');help.className='node-help';help.textContent='?';help.title='Что делает '+TYPES[n.type][0]+'?';help.setAttribute('aria-label','Пояснение: '+n.name);el.querySelector('.collapse').before(help);parent.append(el);if(!n.collapsed)nested.forEach(k=>renderNode(k,el));
     };
-    state.nodes.filter(n=>!n.parent).forEach(n=>renderNode(n,this.host));
+    state.nodes.filter(n=>!n.parent).forEach(n=>renderNode(n,this.host));this.updateConnectionUX();
+    if(focusPort){const ports=[...this.host.querySelectorAll('[data-port]')],target=ports.find(el=>el.dataset.port===focusPort.id&&el.closest('.node')?.dataset.id===focusPort.node)||ports.find(el=>el.dataset.port===focusPort.id);target?.focus({preventScroll:true})}
     const manualPoints=[...(state.wireRoutes||[]).flatMap(r=>r.points),...(this.routePreview?.points||[])];const maxX=Math.max(1200,...manualPoints.map(p=>p.x+80),...[...g.rects.values()].map(r=>r.x+r.w+180)),maxY=Math.max(1000,...manualPoints.map(p=>p.y+80),...[...g.rects.values()].map(r=>r.y+r.h+180));
     this.world.style.width=maxX+'px';this.world.style.height=maxY+'px';this.stage.style.width=Math.max(this.viewport.clientWidth,maxX*this.zoom)+'px';this.stage.style.height=Math.max(this.viewport.clientHeight,maxY*this.zoom)+'px';
     this.world.style.transform=`scale(${this.zoom})`;document.getElementById('zoomtext').textContent=Math.round(this.zoom*100)+'%';
@@ -93,19 +96,25 @@ export class LabCanvas {
   }
   highlight(id){this.svg.querySelectorAll('[data-cable]').forEach(el=>el.classList.toggle('highlighted',el.dataset.cable===id));const l=this.getState().links.find(l=>l.id===id);this.host.querySelectorAll('[data-port]').forEach(el=>el.classList.toggle('endpoint',!!l&&(l.a===el.dataset.port||l.b===el.dataset.port)));this.syncCrossings?.()}
   click(e){if(performance.now()<(this.ignoreClickUntil||0)){e.stopPropagation();return}const help=e.target.closest('.node-help');if(help){e.stopPropagation();this.selectNode(help.closest('.node').dataset.id);this.render();return}if(performance.now()<(this.ignoreClickUntil||0)){e.stopPropagation();return}const port=e.target.closest('[data-port]');if(port){e.stopPropagation();this.portClick(port.dataset.port);return}const collapse=e.target.closest('.collapse');if(collapse){e.stopPropagation();const n=this.getState().nodes.find(n=>n.id===collapse.closest('.node').dataset.id);n.collapsed=!n.collapsed;this.commit();return}}
-  portClick(id){if(this.pending===id){this.pending=null;this.pointer=null;this.render();return}if(!this.pending){if(this.getState().links.some(l=>l.a===id||l.b===id)){const l=this.getState().links.find(l=>l.a===id||l.b===id);this.selectedLink=l.id;this.selectedWireRoute='link:'+l.id;this.cancelCamera?.();this.pauseTraffic?.();this.selectLink(l.id);this.render();return}this.pending=id;this.notify('Выберите второй контакт или тяните кабель мышью. Esc — отмена.');this.render();return}try{connect(this.getState(),this.pending,id);this.pending=null;this.pointer=null;this.commit();this.notify('Контакты соединены')}catch(err){this.notify(err.message);this.pending=null;this.pointer=null;this.render()}}
-  down(e){if(e.button!==0||this.space)return;const port=e.target.closest('[data-port]');if(port){this.cableDrag={id:port.dataset.port,x:e.clientX,y:e.clientY,moved:false};return}const head=e.target.closest('.nodehead');if(!head||e.target.closest('button'))return;
+  portClick(id){
+    if(this.pending===id){this.pending=null;this.pointer=null;this.connectionError=null;this.render();return}
+    if(this.pending){completeConnection(this,id);return}
+    const link=this.getState().links.find(l=>l.a===id||l.b===id);
+    if(link){this.selectedLink=link.id;this.selectedWireRoute='link:'+link.id;this.editingWireRoute=null;this.cancelCamera?.();this.pauseTraffic?.();this.selectLink(link.id);this.render();return}
+    this.pending=id;this.connectionError=null;this.selectedWireRoute=null;this.editingWireRoute=null;this.render();
+  }
+  down(e){if(e.button!==0||this.space)return;const port=e.target.closest('[data-port]');if(port){const id=port.dataset.port;if(!this.getState().links.some(l=>l.a===id||l.b===id)&&(!this.pending||this.pending===id))this.cableDrag={id,x:e.clientX,y:e.clientY,moved:false};return}const head=e.target.closest('.nodehead');if(!head||e.target.closest('button'))return;
     const id=head.closest('.node').dataset.id;if(e.shiftKey||e.ctrlKey||e.metaKey){if(this.selection.has(id))this.selection.delete(id);else this.selection.add(id);this.selectNodes?.([...this.selection]);this.ignoreClickUntil=performance.now()+150;this.render();return}if(!this.selection.has(id)){this.selection=new Set([id]);this.selectNode(id)}else if(this.selection.size>1)this.selectNodes?.([...this.selection]);this.dragSnapshot=this.getState().nodes.map(({id,x,y})=>({id,x,y}));this.drag={id,ids:[...this.selection],x:e.clientX,y:e.clientY,moved:false};e.preventDefault();
   }
   move(e){if(this.moveRoute(e))return;if(this.lasso){const r=this.world.getBoundingClientRect(),x=(e.clientX-r.left)/this.zoom,y=(e.clientY-r.top)/this.zoom,l=this.lasso;l.crossing=x<l.x;l.rect={x:Math.min(x,l.x),y:Math.min(y,l.y),w:Math.abs(x-l.x),h:Math.abs(y-l.y)};this.selection=new Set(lassoSelection(this.getState(),l.rect,this.g,l.base,l.add,l.crossing));this.renderLasso();this.host.querySelectorAll('.node').forEach(el=>el.classList.toggle('selected',this.selection.has(el.dataset.id)));return}if(this.pan){this.viewport.scrollLeft=this.pan.left+this.pan.x-e.clientX;this.viewport.scrollTop=this.pan.top+this.pan.y-e.clientY;return}
-    if(this.cableDrag&&Math.hypot(e.clientX-this.cableDrag.x,e.clientY-this.cableDrag.y)>5){this.cableDrag.moved=true;this.pending=this.cableDrag.id}
+    if(this.cableDrag&&Math.hypot(e.clientX-this.cableDrag.x,e.clientY-this.cableDrag.y)>5){this.cableDrag.moved=true;this.pending=this.cableDrag.id;this.connectionError=null;this.selectedWireRoute=null;this.editingWireRoute=null}
     if(this.drag){const dx=(e.clientX-this.drag.x)/this.zoom,dy=(e.clientY-this.drag.y)/this.zoom;this.drag.moved||=Math.hypot(dx,dy)>1;moveNodes(this.getState(),this.drag.ids,dx,dy);this.drag.x=e.clientX;this.drag.y=e.clientY;this.schedule();return}
     if(this.pending){const wr=this.world.getBoundingClientRect();this.pointer={x:(e.clientX-wr.left)/this.zoom,y:(e.clientY-wr.top)/this.zoom};this.schedule()}
   }
   schedule(){if(this.frame)return;this.frame=requestAnimationFrame(()=>{this.frame=null;this.render()})}
   up(e){if(this.finishRoute(e))return;if(this.lasso){this.lasso=null;this.svg.querySelector('#lasso-box')?.remove();this.svg.querySelector('#lasso-mode')?.remove();this.selectNodes?.([...this.selection]);this.ignoreClickUntil=performance.now()+150;this.render()}if(this.pan){this.pan=null;this.viewport.classList.remove('panning');this.remember()}
     if(this.drag){const moved=this.drag.moved;this.drag=null;if(moved){this.ignoreClickUntil=performance.now()+150;this.commit()}}
-    if(this.cableDrag){const d=this.cableDrag;this.cableDrag=null;if(d.moved&&e){const target=document.elementFromPoint(e.clientX,e.clientY)?.closest('[data-port]');if(target&&target.dataset.port!==d.id){this.portClick(target.dataset.port);this.ignoreClickUntil=performance.now()+100}else{this.pending=d.id;this.render()}}}
+    if(this.cableDrag){const d=this.cableDrag;this.cableDrag=null;if(d.moved&&e){const target=document.elementFromPoint(e.clientX,e.clientY)?.closest('[data-port]');this.ignoreClickUntil=performance.now()+150;if(target&&target.dataset.port!==d.id)this.portClick(target.dataset.port);else{this.pending=d.id;this.render()}}}
   }
   renderLasso(){let box=this.svg.querySelector('#lasso-box');if(!box){box=document.createElementNS('http://www.w3.org/2000/svg','rect');box.id='lasso-box';this.svg.append(box)}box.classList.toggle('crossing-lasso',this.lasso.crossing);let label=this.svg.querySelector('#lasso-mode');if(!label){label=document.createElementNS('http://www.w3.org/2000/svg','text');label.id='lasso-mode';this.svg.append(label)}const r=this.lasso.rect;label.setAttribute('x',r.x+8/this.zoom);label.setAttribute('y',r.y+16/this.zoom);label.setAttribute('font-size',11/this.zoom);label.textContent=this.lasso.crossing?'Пересечение · всё, чего касается рамка':'Окно · только целиком внутри';for(const [k,v] of Object.entries({x:r.x,y:r.y,width:r.w,height:r.h}))box.setAttribute(k,v)}
   setSelection(ids){this.selection=new Set(ids);this.render()}
